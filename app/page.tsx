@@ -1,19 +1,43 @@
-import { Button } from "@/components/ui/button"
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
+import { HouseIcon } from 'lucide-react'
 
-export default function Page() {
+import HealthStatus from '@/components/health-status'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
+import { PageContainer } from '@/components/ui/page-container'
+import { PageHeader } from '@/components/ui/page-header'
+import { getQueryClient, trpc } from '@/trpc/server'
+
+export default async function Page() {
+  const queryClient = getQueryClient()
+  await queryClient.prefetchQuery(trpc.health.hello.queryOptions())
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PageContainer>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Home</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <PageHeader
+          icon={<HouseIcon />}
+          title="Project ready"
+          description="You may now add components and start building."
+          extraContent={<Button>Button</Button>}
+        />
+        <HealthStatus />
+        <p className="font-mono text-xs text-muted-foreground">
+          Press <kbd>d</kbd> to toggle dark mode
+        </p>
+      </PageContainer>
+    </HydrationBoundary>
   )
 }
