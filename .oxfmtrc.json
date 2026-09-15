@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 80,
+  "sortPackageJson": false,
+  "sortTailwindcss": {
+    "stylesheet": "./app/globals.css",
+    "functions": ["clsx", "cn", "cva"]
+  },
+  "sortImports": {
+    "order": "asc",
+    "ignoreCase": true,
+    "newlinesBetween": true,
+    "internalPattern": ["@/", "~/", "#"],
+    "groups": [
+      ["value-builtin", "type-builtin"],
+      ["value-external", "type-external"],
+      ["value-internal", "type-internal"],
+      [
+        "value-parent",
+        "type-parent",
+        "value-sibling",
+        "type-sibling",
+        "value-index",
+        "type-index"
+      ],
+      "unknown"
+    ]
+  },
+  "ignorePatterns": [
+    "AGENTS.md",
+    ".cursor",
+    ".agents",
+    ".agent",
+    ".claude",
+    "db/migrations"
+  ]
+}
