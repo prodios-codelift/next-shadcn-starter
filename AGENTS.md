@@ -34,7 +34,7 @@ skills:
 <!-- BEGIN:drizzle-schema-workflow -->
 ## Drizzle schema workflow
 
-- **DO NOT** manually edit, add, delete, rename, move, copy, paste, split, or merge any files under `db/migrations/`.
-- After changing `db/schema/`, run `bun run db:generate` then `bun run db:migrate` immediately. Do **not** wait for the user to review or confirm.
-- Place all DB seed scripts under `db/seed/` (do not create seed scripts outside `db/`).
+- **DO NOT** manually edit, add, delete, rename, move, copy, paste, split, or merge any files under `src/db/migrations/`.
+- After changing `src/db/schema/`, run `bun run db:generate` then `bun run db:migrate` immediately. Do **not** wait for the user to review or confirm.
+- Place all DB seed scripts under `src/db/seed/` (do not create seed scripts outside `src/db/`).
 <!-- END:drizzle-schema-workflow -->

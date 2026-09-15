@@ -16,7 +16,7 @@
     "next-env.d.ts",
     ".agents/**",
     "dist/**",
-    "db/migrations/**"
+    "src/db/migrations/**"
   ],
   "rules": {
     "no-array-constructor": "error",

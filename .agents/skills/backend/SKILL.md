@@ -10,26 +10,26 @@ Central place for **server-side** conventions beyond generic framework docs. Rep
 
 ## Drizzle schema workflow
 
-PostgreSQL + Drizzle ORM. Schema lives under **`db/schema/`**, the client is **`db/index.ts`**, and drizzle-kit writes SQL to **`db/migrations/`**. Config is **`drizzle.config.ts`**. Query from services with **`db`** from **`@/db`**.
+PostgreSQL + Drizzle ORM. Schema lives under **`src/db/schema/`**, the client is **`src/db/index.ts`**, and drizzle-kit writes SQL to **`src/db/migrations/`**. Config is **`drizzle.config.ts`**. Query from services with **`db`** from **`@/db`**.
 
 ### Layout
 
-- **`db/schema/<domain>.ts`** — tables, relations, and domain enums for one domain.
-- **`db/schema/index.ts`** — re-export every schema module (`export * from './<domain>'`).
-- **`db/index.ts`** — `drizzle(env.DATABASE_URL, { schema })`. Do not create extra clients.
-- **`db/migrations/`** — drizzle-kit output only.
-- **`db/seed/`** — all seed scripts (do not create seed scripts outside **`db/`**).
+- **`src/db/schema/<domain>.ts`** — tables, relations, and domain enums for one domain.
+- **`src/db/schema/index.ts`** — re-export every schema module (`export * from './<domain>'`).
+- **`src/db/index.ts`** — `drizzle(env.DATABASE_URL, { schema })`. Do not create extra clients.
+- **`src/db/migrations/`** — drizzle-kit output only.
+- **`src/db/seed/`** — all seed scripts (do not create seed scripts outside **`src/db/`**).
 
 Use **`pgTable`**, **`timestamp(..., { withTimezone: true })`**, **`.defaultNow()`**, and **`.$onUpdate(() => new Date())`** for `createdAt` / `updatedAt` the same way as prodios-forge.
 
 ### Do not hand-write migrations
 
-- **DO NOT** manually edit, add, delete, rename, move, copy, paste, split, or merge any files under **`db/migrations/`**.
+- **DO NOT** manually edit, add, delete, rename, move, copy, paste, split, or merge any files under **`src/db/migrations/`**.
 - Generated migration files **should** be committed together with the schema change that produced them. Do not invent extra migration commits or push them separately from the schema work.
 
 ### Generate and migrate automatically — do not wait
 
-After **any** change to **`db/schema/`** (new table, column, index, relation, or enum):
+After **any** change to **`src/db/schema/`** (new table, column, index, relation, or enum):
 
 1. Run **`bun run db:generate`** immediately.
 2. Run **`bun run db:migrate`** immediately after generate succeeds.
@@ -41,7 +41,7 @@ Requires **`DATABASE_URL`** in **`.env`** (see **`.env.example`**).
 
 ## When touching tRPC
 
-Read **[references/trpc-procedures.md](references/trpc-procedures.md)** for domain file layout: each domain lives under **`trpc/routers/<domain>/`** with **`*.router.ts`**, **`*.service.ts`**, and **`*.input.ts`**, plus **creating procedures**, **refactoring procedures**, tRPC-first vs Next route handlers, and related notes. The app root **`trpc/routers/_app.ts`** merges domain routers.
+Read **[references/trpc-procedures.md](references/trpc-procedures.md)** for domain file layout: each domain lives under **`src/trpc/routers/<domain>/`** with **`*.router.ts`**, **`*.service.ts`**, and **`*.input.ts`**, plus **creating procedures**, **refactoring procedures**, tRPC-first vs Next route handlers, and related notes. The app root **`src/trpc/routers/_app.ts`** merges domain routers.
 
 ### Router structure quick rule
 
@@ -96,7 +96,7 @@ In **`*.ts`** server modules that define several **functions** (routers, service
 
 ### Compliance check against this skill
 
-Before finishing any task that **adds** or **refactors** backend tRPC or Drizzle code, **verify the change against every section of this SKILL.md** (Drizzle generate/migrate, tRPC layout, **`TRPCError`** in **`*.service.ts`**, assertion-helper pattern, tenancy/middleware, bulk actions, **progressive function order** in touched **`*.ts`** modules, linked **`references/*`** docs). **If anything is out of conformance**, refactor to match—including **frontend** callers under **`app/**`** (**`loader.ts`**, forms, **`trpc.*.queryOptions` / `mutationOptions`**) so **procedure inputs**, cache keys, and invalidation filters stay consistent with the updated API. Leaving updated routers paired with stale client payloads is insufficient. If **`db/schema/`** changed, **`bun run db:generate`** and **`bun run db:migrate`** must already have been run before finishing.
+Before finishing any task that **adds** or **refactors** backend tRPC or Drizzle code, **verify the change against every section of this SKILL.md** (Drizzle generate/migrate, tRPC layout, **`TRPCError`** in **`*.service.ts`**, assertion-helper pattern, tenancy/middleware, bulk actions, **progressive function order** in touched **`*.ts`** modules, linked **`references/*`** docs). **If anything is out of conformance**, refactor to match—including **frontend** callers under **`src/app/**`** (**`loader.ts`**, forms, **`trpc.*.queryOptions` / `mutationOptions`**) so **procedure inputs**, cache keys, and invalidation filters stay consistent with the updated API. Leaving updated routers paired with stale client payloads is insufficient. If **`src/db/schema/`** changed, **`bun run db:generate`** and **`bun run db:migrate`** must already have been run before finishing.
 
 ## Bulk actions from the client
 

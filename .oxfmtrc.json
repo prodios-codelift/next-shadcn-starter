@@ -6,7 +6,7 @@
   "printWidth": 80,
   "sortPackageJson": false,
   "sortTailwindcss": {
-    "stylesheet": "./app/globals.css",
+    "stylesheet": "./src/app/globals.css",
     "functions": ["clsx", "cn", "cva"]
   },
   "sortImports": {
@@ -35,6 +35,6 @@
     ".agents",
     ".agent",
     ".claude",
-    "db/migrations"
+    "src/db/migrations"
   ]
 }

@@ -12,7 +12,7 @@ bun run db:generate
 bun run db:migrate
 ```
 
-Schema lives in `db/schema/`. The Drizzle client is `db/index.ts`.
+Schema lives in `src/db/schema/`. The Drizzle client is `src/db/index.ts`.
 
 ## Adding components
 
@@ -22,7 +22,7 @@ To add components to your app, run the following command:
 npx shadcn@latest add button
 ```
 
-This will place the ui components in the `components` directory.
+This will place the ui components in the `src/components` directory.
 
 ## Using components
 
