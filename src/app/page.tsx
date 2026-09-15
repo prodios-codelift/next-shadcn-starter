@@ -31,7 +31,14 @@ export default async function Page() {
           icon={<HouseIcon />}
           title="Project ready"
           description="You may now add components and start building."
-          extraContent={<Button>Button</Button>}
+          extraContent={
+            <Button
+              render={<a href="https://www.google.com">Google</a>}
+              nativeButton={false}
+            >
+              Button
+            </Button>
+          }
         />
         <HealthStatus />
         <p className="font-mono text-xs text-muted-foreground">

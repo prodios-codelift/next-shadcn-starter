@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist_Mono, Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
 
 import { QueryProvider } from '@/components/providers/query-provider'
@@ -9,7 +9,7 @@ import { TRPCReactProvider } from '@/trpc/client'
 
 import './globals.css'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const fontMono = Geist_Mono({
   subsets: ['latin'],
@@ -25,7 +25,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn('font-sans antialiased', fontMono.variable, geist.variable)}
+      className={cn(
+        'font-sans antialiased',
+        fontMono.variable,
+        'font-sans',
+        inter.variable,
+      )}
     >
       <body>
         <ThemeProvider>
