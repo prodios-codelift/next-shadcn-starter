@@ -15,6 +15,8 @@ skills:
     load: ".agents/skills/backend/SKILL.md"
   - task: "Frontend — page layout, UI patterns, component placement"
     load: ".agents/skills/frontend/SKILL.md"
+  - task: "shadcn/ui usage examples — composing registry components, charts, and blocks"
+    load: ".agents/skills/shadcn-examples/SKILL.md"
 <!-- intent-skills:end -->
 
 ## Project-specific conventions

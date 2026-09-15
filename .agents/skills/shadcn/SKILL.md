@@ -166,13 +166,15 @@ See [cli.md — `info` command](./cli.md) for the full field reference.
 
 ## Component Docs, Examples, and Usage
 
-Run `npx shadcn@latest docs <component>` to get the URLs for a component's documentation, examples, and API reference. Fetch these URLs to get the actual content.
+**Prefer the local examples catalog first:** [../shadcn-examples/SKILL.md](../shadcn-examples/SKILL.md). It has copy-pasteable official registry examples (components, charts, blocks). Read only the matching file for the component you need.
+
+Run `npx shadcn@latest docs <component>` to get the URLs for a component's documentation, examples, and API reference. Fetch these URLs when the local catalog does not cover the case.
 
 ```bash
 npx shadcn@latest docs button dialog select
 ```
 
-**When creating, fixing, debugging, or using a component, always run `npx shadcn@latest docs` and fetch the URLs first.** This ensures you're working with the correct API and usage patterns rather than guessing.
+**When creating, fixing, debugging, or using a component,** prefer the [local examples catalog](../shadcn-examples/SKILL.md) first. If it does not cover the case, run `npx shadcn@latest docs` and fetch the URLs. This ensures you're working with the correct API and usage patterns rather than guessing.
 
 ## Workflow
 
