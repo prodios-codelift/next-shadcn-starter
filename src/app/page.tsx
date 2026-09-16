@@ -1,50 +1,12 @@
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
-import { HouseIcon } from 'lucide-react'
-
-import HealthStatus from '@/components/health-status'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from '@/components/ui/breadcrumb'
-import { Button } from '@/components/ui/button'
-import { PageContainer } from '@/components/ui/page-container'
-import { PageHeader } from '@/components/ui/page-header'
-import { getQueryClient, trpc } from '@/trpc/server'
+import { TextLoader } from '@/components/ui/text-loader'
 
 export default async function Page() {
-  const queryClient = getQueryClient()
-  await queryClient.prefetchQuery(trpc.health.hello.queryOptions())
-
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <PageContainer>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Home</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <PageHeader
-          icon={<HouseIcon />}
-          title="Project ready"
-          description="You may now add components and start building."
-          extraContent={
-            <Button
-              render={<a href="https://www.google.com">Google</a>}
-              nativeButton={false}
-            >
-              Button
-            </Button>
-          }
-        />
-        <HealthStatus />
-        <p className="font-mono text-xs text-muted-foreground">
-          Press <kbd>d</kbd> to toggle dark mode
-        </p>
-      </PageContainer>
-    </HydrationBoundary>
+    <div className="flex h-screen flex-col items-center justify-center">
+      <div className="font-medium">Wireframe App</div>
+      <div className="text-sm text-muted-foreground">
+        Building wireframe. Please wait<TextLoader>...</TextLoader>
+      </div>
+    </div>
   )
 }
