@@ -8,6 +8,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+# Mock data
+
+This is a wireframe app. When building UI, follow [.agents/skills/mock-data/SKILL.md](.agents/skills/mock-data/SKILL.md).
+
 # Before finishing a task
 
 Run `npm run typecheck` and fix any TypeScript errors before considering the task complete. Do not finish with a failing typecheck.
