@@ -16,13 +16,4 @@ This is a wireframe app. When building UI, follow [.agents/skills/mock-data/SKIL
 
 Run `npm run typecheck` and fix any TypeScript errors before considering the task complete. Do not finish with a failing typecheck.
 
-When a UI change needs visual verification, take a screenshot and inspect it before finishing:
-
-```bash
-npx -y playwright@1.61.0 screenshot \
-      --browser chromium \
-      http://localhost:3000 \
-      /root/snapshot.png
-```
-
-Assume the app is already running at `http://localhost:3000`. Read `/root/snapshot.png` and confirm the result matches the expected UI. Skip this when the task does not change user-visible UI.
+When a UI change needs visual verification, follow [.agents/skills/agent-browser/SKILL.md](.agents/skills/agent-browser/SKILL.md) to screenshot and inspect the result before finishing. Assume the app is already running at `http://localhost:3000`. Skip this when the task does not change user-visible UI.
