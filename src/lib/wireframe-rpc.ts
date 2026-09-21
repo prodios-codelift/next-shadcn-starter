@@ -1,5 +1,6 @@
 export const WIRE_FRAME_RPC_CHANNEL = 'prodios:wireframe-preview-rpc';
 export const WIRE_FRAME_RPC_VERSION = 1;
+export const WIRE_FRAME_RPC_CAPABILITIES = ['route-navigation'] as const;
 
 type RpcHandlers = {
   getLocation: () => string;
@@ -36,6 +37,7 @@ export class WireframePreviewClientRpc {
         channel: WIRE_FRAME_RPC_CHANNEL,
         type: 'ready',
         version: WIRE_FRAME_RPC_VERSION,
+        capabilities: [...WIRE_FRAME_RPC_CAPABILITIES],
       },
       this.parentOrigin
     );
