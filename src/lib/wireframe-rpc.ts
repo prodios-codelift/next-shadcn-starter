@@ -1,7 +1,4 @@
-import {
-  startElementPicker,
-  stopElementPicker,
-} from '@/scripts/element-picker';
+import { startElementPicker, stopElementPicker } from '@/lib/element-picker';
 
 export const WIRE_FRAME_RPC_CHANNEL = 'prodios:wireframe-preview-rpc';
 export const WIRE_FRAME_RPC_VERSION = 1;
