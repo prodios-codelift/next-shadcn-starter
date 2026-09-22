@@ -1,6 +1,11 @@
+import { startElementPicker, stopElementPicker } from '@/lib/element-picker';
+
 export const WIRE_FRAME_RPC_CHANNEL = 'prodios:wireframe-preview-rpc';
 export const WIRE_FRAME_RPC_VERSION = 1;
-export const WIRE_FRAME_RPC_CAPABILITIES = ['route-navigation'] as const;
+export const WIRE_FRAME_RPC_CAPABILITIES = [
+  'route-navigation',
+  'element-picker',
+] as const;
 
 type RpcHandlers = {
   getLocation: () => string;
@@ -12,7 +17,13 @@ type RpcHandlers = {
 type RpcRequest = {
   type: 'request';
   id: string;
-  method: 'getLocation' | 'navigate' | 'back' | 'forward';
+  method:
+    | 'getLocation'
+    | 'navigate'
+    | 'back'
+    | 'forward'
+    | 'startElementPicker'
+    | 'stopElementPicker';
   params?: { location?: string };
 };
 
@@ -44,6 +55,7 @@ export class WireframePreviewClientRpc {
   }
 
   stop() {
+    stopElementPicker();
     window.removeEventListener('message', this.handleWindowMessage);
     this.port?.removeEventListener('message', this.handlePortMessage);
     this.port?.close();
@@ -107,6 +119,26 @@ export class WireframePreviewClientRpc {
         case 'forward':
           await this.handlers.forward();
           break;
+        case 'startElementPicker':
+          startElementPicker({
+            pick: (element) => {
+              port.postMessage({
+                type: 'notification',
+                event: 'elementPicked',
+                element,
+              });
+            },
+            cancel: () => {
+              port.postMessage({
+                type: 'notification',
+                event: 'elementPickerCancelled',
+              });
+            },
+          });
+          break;
+        case 'stopElementPicker':
+          stopElementPicker();
+          break;
       }
 
       port.postMessage({
@@ -154,9 +186,14 @@ function isRpcRequest(value: unknown): value is RpcRequest {
   return (
     value.type === 'request' &&
     typeof value.id === 'string' &&
-    ['getLocation', 'navigate', 'back', 'forward'].includes(
-      String(value.method)
-    )
+    [
+      'getLocation',
+      'navigate',
+      'back',
+      'forward',
+      'startElementPicker',
+      'stopElementPicker',
+    ].includes(String(value.method))
   );
 }
 
