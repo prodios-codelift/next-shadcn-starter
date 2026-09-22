@@ -1,15 +1,14 @@
+import {
+  startElementPicker,
+  stopElementPicker,
+} from '@/scripts/element-picker';
+
 export const WIRE_FRAME_RPC_CHANNEL = 'prodios:wireframe-preview-rpc';
 export const WIRE_FRAME_RPC_VERSION = 1;
-export const WIRE_FRAME_RPC_CAPABILITIES = ['route-navigation', 'script-injection'] as const;
-
-type PickerBridge = {
-  pick: (element: unknown) => void;
-  cancel: () => void;
-};
-
-type PickerBridgeWindow = Window & {
-  __prodiosPickerBridge?: PickerBridge;
-};
+export const WIRE_FRAME_RPC_CAPABILITIES = [
+  'route-navigation',
+  'element-picker',
+] as const;
 
 type RpcHandlers = {
   getLocation: () => string;
@@ -21,8 +20,14 @@ type RpcHandlers = {
 type RpcRequest = {
   type: 'request';
   id: string;
-  method: 'getLocation' | 'navigate' | 'back' | 'forward' | 'evaluate';
-  params?: { location?: string; script?: string };
+  method:
+    | 'getLocation'
+    | 'navigate'
+    | 'back'
+    | 'forward'
+    | 'startElementPicker'
+    | 'stopElementPicker';
+  params?: { location?: string };
 };
 
 export class WireframePreviewClientRpc {
@@ -53,6 +58,7 @@ export class WireframePreviewClientRpc {
   }
 
   stop() {
+    stopElementPicker();
     window.removeEventListener('message', this.handleWindowMessage);
     this.port?.removeEventListener('message', this.handlePortMessage);
     this.port?.close();
@@ -116,16 +122,26 @@ export class WireframePreviewClientRpc {
         case 'forward':
           await this.handlers.forward();
           break;
-        case 'evaluate': {
-          const script = request.params?.script;
-          if (typeof script !== 'string') {
-            throw new Error('Invalid script');
-          }
-          this.installPickerBridge(port);
-          const runScript = new Function(script) as () => void;
-          runScript();
+        case 'startElementPicker':
+          startElementPicker({
+            pick: (element) => {
+              port.postMessage({
+                type: 'notification',
+                event: 'elementPicked',
+                element,
+              });
+            },
+            cancel: () => {
+              port.postMessage({
+                type: 'notification',
+                event: 'elementPickerCancelled',
+              });
+            },
+          });
           break;
-        }
+        case 'stopElementPicker':
+          stopElementPicker();
+          break;
       }
 
       port.postMessage({
@@ -140,25 +156,6 @@ export class WireframePreviewClientRpc {
         error: error instanceof Error ? error.message : 'RPC request failed',
       });
     }
-  }
-
-  private installPickerBridge(port: MessagePort) {
-    const bridge: PickerBridge = {
-      pick: (element) => {
-        port.postMessage({
-          type: 'notification',
-          event: 'elementPicked',
-          element,
-        });
-      },
-      cancel: () => {
-        port.postMessage({
-          type: 'notification',
-          event: 'elementPickerCancelled',
-        });
-      },
-    };
-    (window as PickerBridgeWindow).__prodiosPickerBridge = bridge;
   }
 }
 
@@ -192,9 +189,14 @@ function isRpcRequest(value: unknown): value is RpcRequest {
   return (
     value.type === 'request' &&
     typeof value.id === 'string' &&
-    ['getLocation', 'navigate', 'back', 'forward', 'evaluate'].includes(
-      String(value.method)
-    )
+    [
+      'getLocation',
+      'navigate',
+      'back',
+      'forward',
+      'startElementPicker',
+      'stopElementPicker',
+    ].includes(String(value.method))
   );
 }
 
